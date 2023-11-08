@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @author Renan Rossignatti de França <renanrfranca@gmail.com>
+ * @brief This file contains the main routine for this exercise and functions for creating images with gradients, circles, and squares.
+ */
+
 #include <iostream>
 #include <sstream>
 #include <string>
@@ -5,6 +11,13 @@
 
 #include "export_image.cpp"
 
+/**
+ * @brief Creates an image with a gradient.
+ *
+ * This function generates an image with a smooth color gradient from the top-left to the bottom-right corner.
+ * The result is a gradient going from black to red horizontally and black to blue vertically, resulting in a purple bottom-right
+ * The image is saved in both P3 PPM and PNG formats.
+ */
 void createGradient() {
     // Image
     int image_width = 256;
@@ -33,6 +46,12 @@ void createGradient() {
     saveToPng("gradient.png", image_width, image_height, output_stream.str());
 }
 
+/**
+ * @brief Creates an image of a circle.
+ *
+ * This function generates an image with a filled red circle on a white background.
+ * The image is saved in both P3 PPM and PNG formats.
+ */
 void createCircle() {
     // Image
     int image_width = 255;
@@ -58,6 +77,12 @@ void createCircle() {
     saveToPng("circle.png", image_width, image_height, output_stream.str());
 }
 
+/**
+ * @brief Creates an image of a square.
+ *
+ * This function generates an image with a filled red square in the center on a white background.
+ * The image is saved in both P3 PPM and PNG formats.
+ */
 void createSquare() {
     // Image
     int image_width = 256;
@@ -88,6 +113,9 @@ void createSquare() {
     saveToPng("square.png", image_width, image_height, output_stream.str());
 }
 
+/**
+ * @brief The main function that creates a gradient, a circle and a square image and saves them in P3 PPM and PNG format
+ */
 int main() {
     createGradient();
     createCircle();
