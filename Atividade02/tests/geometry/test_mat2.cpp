@@ -3,20 +3,32 @@
 
 TEST(Mat2Test, DefaultConstructor) {
     mat2 m;
-    EXPECT_EQ(m[0].x, 1.0);
-    EXPECT_EQ(m[0].y, 0.0);
-    EXPECT_EQ(m[1].x, 0.0);
-    EXPECT_EQ(m[1].y, 1.0);
+    EXPECT_EQ(m[0][0], 1.0);
+    EXPECT_EQ(m[0][1], 0.0);
+    EXPECT_EQ(m[1][0], 0.0);
+    EXPECT_EQ(m[1][1], 1.0);
 }
 
 TEST(Mat2Test, CustomConstructor) {
     vec2 row1(1.0, 2.0);
     vec2 row2(3.0, 4.0);
     mat2 m(row1, row2);
-    EXPECT_EQ(m[0].x, 1.0);
-    EXPECT_EQ(m[0].y, 2.0);
-    EXPECT_EQ(m[1].x, 3.0);
-    EXPECT_EQ(m[1].y, 4.0);
+    EXPECT_EQ(m[0][0], 1.0);
+    EXPECT_EQ(m[0][1], 2.0);
+    EXPECT_EQ(m[1][0], 3.0);
+    EXPECT_EQ(m[1][1], 4.0);
+}
+
+TEST(Mat2Test, IndexOperator) {
+    vec2 row1(1.0, 2.0);
+    vec2 row2(4.0, 5.0);
+
+    mat2 m(row1, row2);
+    EXPECT_EQ(m[0], row1);
+    EXPECT_EQ(m[1], row2);
+
+    m[0] = vec2(10.0, 11.0);
+    EXPECT_EQ(m[0], vec2(10.0, 11.0));
 }
 
 TEST(Mat2Test, ScalarMultiplication) {
@@ -24,10 +36,10 @@ TEST(Mat2Test, ScalarMultiplication) {
     vec2 row2(3.0, 4.0);
     mat2 m(row1, row2);
     mat2 result = m * 2.0;
-    EXPECT_EQ(result[0].x, 2.0);
-    EXPECT_EQ(result[0].y, 4.0);
-    EXPECT_EQ(result[1].x, 6.0);
-    EXPECT_EQ(result[1].y, 8.0);
+    EXPECT_EQ(result[0][0], 2.0);
+    EXPECT_EQ(result[0][1], 4.0);
+    EXPECT_EQ(result[1][0], 6.0);
+    EXPECT_EQ(result[1][1], 8.0);
 }
 
 TEST(Mat2Test, ScalarMultiplicationReverseOrder) {
@@ -35,13 +47,8 @@ TEST(Mat2Test, ScalarMultiplicationReverseOrder) {
     vec2 row2(3.0, 4.0);
     mat2 m(row1, row2);
     mat2 result = 2.0 * m;
-    EXPECT_EQ(result[0].x, 2.0);
-    EXPECT_EQ(result[0].y, 4.0);
-    EXPECT_EQ(result[1].x, 6.0);
-    EXPECT_EQ(result[1].y, 8.0);
-}
-
-int main(int argc, char** argv) {
-    ::testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
+    EXPECT_EQ(result[0][0], 2.0);
+    EXPECT_EQ(result[0][1], 4.0);
+    EXPECT_EQ(result[1][0], 6.0);
+    EXPECT_EQ(result[1][1], 8.0);
 }

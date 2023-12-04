@@ -1,21 +1,17 @@
-# Atividade 1
+# Atividade 2
 
-Neste projeto, geramos imagens de um degradê, um círculo e um quadrado e salvamos nos formatos PPM (P3) e PNG 
-Para salvar as imagens em PNG, utilizamos a [STB image library](https://github.com/nothings/stb).
-
-# Imagens geradas
-
-### Degradê
-<img src="./gradient.png" width="120">
-
-### Círculo
-<img src="./circle.png" width="120">
-
-### Quadrado
-<img src="./square.png" width="120">
+Nesta ativadade, geramos classes de vetores e matrizes, com diversas funções auxiliares. Também adicionamos testes usando a biblioteca GoogleTest.
 
 ## Como compilar
 
-Basta utilizar o g++:
+Primeiro geramos os build files com `cmake` a partir do diretório raíz desta atividade
 
-```g++ atividade1.cpp -o atividade1```
+`cmake -S . -B build`
+
+Então podemos ir ao diretório `build` e compilar o projeto com `make`
+
+`cd build && make`
+
+Para rodar os testes, basta rodar o `ctest`, ainda dentro o diretório build
+
+`ctest`

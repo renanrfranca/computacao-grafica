@@ -52,6 +52,14 @@ using point2 = vec2;
 
 // Vector Utility Functions
 
+inline bool operator==(const vec2& u, const vec2& v) {
+    return u.x() == v.x() && u.y() == v.y();
+}
+
+inline bool operator!=(const vec2& u, const vec2& v) {
+    return !(u == v);
+}
+
 inline std::ostream& operator<<(std::ostream &out, const vec2 &v) {
     return out << v.e[0] << ' ' << v.e[1] << ' ' << v.e[2];
 }

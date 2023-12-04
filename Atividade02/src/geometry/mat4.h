@@ -10,7 +10,7 @@ using std::sqrt;
 
 class mat4 {
   public:
-    vec4 r[3];
+    vec4 r[4];
 
     mat4() {
         r[0] = vec4(1.0, 0, 0, 0);

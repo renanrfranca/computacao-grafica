@@ -16,7 +16,7 @@ class vec4 {
     double x() const { return e[0]; }
     double y() const { return e[1]; }
     double z() const { return e[2]; }
-    double w() const { return e[2]; }
+    double w() const { return e[3]; }
 
     vec4 operator-() const { return vec4(-e[0], -e[1], -e[2], -e[3]); }
     double operator[](int i) const { return e[i]; }
@@ -56,6 +56,16 @@ using point4 = vec4;
 
 
 // Vector Utility Functions
+
+// Vector Equality Operator
+inline bool operator==(const vec4& u, const vec4& v) {
+    return u.x() == v.x() && u.y() == v.y() && u.z() == v.z() && u.w() == v.w();
+}
+
+// Vector Inequality Operator
+inline bool operator!=(const vec4& u, const vec4& v) {
+    return !(u == v);
+}
 
 inline std::ostream& operator<<(std::ostream &out, const vec4 &v) {
     return out << v.e[0] << ' ' << v.e[1] << ' ' << v.e[2] << ' ' << v.e[3];
