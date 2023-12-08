@@ -1,3 +1,8 @@
+/**
+ * @file
+ * @brief Contains a class of a 3D vector and basic operations
+ */
+
 #ifndef VEC3_H
 #define VEC3_H
 
@@ -6,6 +11,12 @@
 
 using std::sqrt;
 
+/**
+ * @class vec3
+ * @brief Represents a 3D vector
+ *
+ * The class also contains a few useful functions for vector operations
+ */
 class vec3 {
   public:
     double e[3];

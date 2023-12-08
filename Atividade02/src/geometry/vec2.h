@@ -1,3 +1,8 @@
+/**
+ * @file
+ * @brief Contains a class of a 2D vector and basic operations
+ */
+
 #ifndef VEC2_H
 #define VEC2_H
 
@@ -6,6 +11,12 @@
 
 using std::sqrt;
 
+/**
+ * @class vec2
+ * @brief Represents a 2D vector
+ *
+ * The class also contains a few useful functions for vector operations
+ */
 class vec2 {
   public:
     double e[2];

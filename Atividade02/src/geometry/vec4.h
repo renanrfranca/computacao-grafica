@@ -1,3 +1,8 @@
+/**
+ * @file
+ * @brief Contains a class of a 4D vector and basic operations
+ */
+
 #ifndef VEC4_H
 #define VEC4_H
 
@@ -6,6 +11,12 @@
 
 using std::sqrt;
 
+/**
+ * @class vec4
+ * @brief Represents a 4D vector
+ *
+ * The class also contains a few useful functions for vector operations
+ */
 class vec4 {
   public:
     double e[4];

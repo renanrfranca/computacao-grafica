@@ -52,3 +52,11 @@ TEST(Mat2Test, ScalarMultiplicationReverseOrder) {
     EXPECT_EQ(result[1][0], 6.0);
     EXPECT_EQ(result[1][1], 8.0);
 }
+
+TEST(Mat2Test, DeterminantCalculation) {
+    mat2 identityMatrix;
+    EXPECT_EQ(identityMatrix.determinant(), 1.0);
+
+    mat2 nonTrivialMatrix(vec2(3.0, 1.0), vec2(4.0, 2.0));
+    EXPECT_EQ(nonTrivialMatrix.determinant(), 2.0);
+}

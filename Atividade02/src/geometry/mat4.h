@@ -1,3 +1,8 @@
+/**
+ * @file
+ * @brief Contains a class of a 4x4 matrix made from 4 rows of vec4 and basic operations
+ */
+
 #ifndef mat4_H
 #define mat4_H
 
@@ -8,6 +13,13 @@
 
 using std::sqrt;
 
+/**
+ * @class mat4
+ * @brief Represents a 4x4 matrix
+ *
+ * The matrix is built using 4 rows of vec4 vectors
+ * The class also contains a few useful functions for matrix operations
+ */
 class mat4 {
   public:
     vec4 r[4];
@@ -35,9 +47,7 @@ class mat4 {
     }
 };
 
-// Vector Utility Functions
 
-// Matrix operations
 inline mat4 operator*(const mat4 &mat, double scalar) {
     return mat4(mat[0] * scalar, mat[1] * scalar, mat[2] * scalar, mat[3] * scalar);
 }

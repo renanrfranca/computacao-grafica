@@ -63,3 +63,11 @@ TEST(Mat3Test, ScalarMultiplicationOrder) {
     EXPECT_EQ(result1[1], result2[1]);
     EXPECT_EQ(result1[2], result2[2]);
 }
+
+TEST(Mat3Test, DeterminantCalculation) {
+    mat3 identityMatrix;
+    EXPECT_EQ(identityMatrix.determinant(), 1.0);
+
+    mat3 nonTrivialMatrix(vec3(1.0, 2.0, 3.0), vec3(4.0, 5.0, 6.0), vec3(7.0, 8.0, 9.0));
+    EXPECT_EQ(nonTrivialMatrix.determinant(), 0.0);
+}

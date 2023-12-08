@@ -1,7 +1,7 @@
 /**
  * @file
  * @author Renan Rossignatti de França <renanrfranca@gmail.com>
- * @brief This file contains the main routine for this exercise and functions for creating images with gradients, circles, and squares.
+ * @brief This file contains the main routine for this exercise and creates a gradient using the new `color` class
  */
 
 #include <iostream>
