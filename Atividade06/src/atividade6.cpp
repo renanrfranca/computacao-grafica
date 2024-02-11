@@ -27,13 +27,15 @@
 int main() {
     hittable_list world;
 
-    // world.add(make_shared<object>("../resources/tri-pyramid.obj", 100, vec3(-6, 2, -14), vec3(0, 30, 0)));
-    // world.add(make_shared<object>("../resources/20facestar.obj", 1, vec3(0, -2, -2), vec3(90, 0, 0)));
-    // world.add(make_shared<object>("../resources/cube.obj", 2, vec3(4, 1.5, 0), vec3(30, 45, 0)));
-    // world.add(make_shared<object>("../resources/dodecahedron.obj", 1, vec3(0, 5, 6)));
-    world.add(make_shared<sphere>(point3(4,5,-1), 4, make_shared<lambertian>(color(0.5, 0, 0.5))));
+    auto material_ground = make_shared<lambertian>(color(0.8, 0.8, 0.0));
+    auto material_center = make_shared<lambertian>(color(0.7, 0.3, 0.3));
+    auto material_left   = make_shared<metal>(color(0.8, 0.8, 0.8));
+    auto material_right  = make_shared<metal>(color(0.8, 0.6, 0.2));
 
-    world.add(make_shared<sphere>(point3(0,-100,-1), 100, make_shared<lambertian>(color(0.8, 0.8, 0.0)))); // Ground
+    world.add(make_shared<sphere>(point3( 0.0, -100.5, -1.0), 100.0, material_ground));
+    world.add(make_shared<sphere>(point3( 0.0,    0.0, -1.0),   0.5, material_center));
+    world.add(make_shared<sphere>(point3(-1.0,    0.0, -1.0),   0.5, material_left));
+    world.add(make_shared<sphere>(point3( 1.0,    0.0, -1.0),   0.5, material_right));
 
     camera camera;
 
@@ -42,9 +44,9 @@ int main() {
     camera.samples_per_pixel = 200;
     camera.max_depth         = 50;
 
-    camera.vfov     = 60;
-    camera.lookfrom = point3(0,3,-15);
-    camera.lookat   = point3(0,2,0);
+    camera.vfov     = 90;
+    camera.lookfrom = point3(0,0,-2);
+    camera.lookat   = point3(0,0,0);
     camera.vup      = vec3(0,1,0);
 
     camera.render(world, "camera");
