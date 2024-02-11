@@ -39,9 +39,9 @@ inline double random_double(double min, double max) {
 }
 
 // Common Headers
-#include "./util/interval.h"
-#include "./geometry/ray.h"
-#include "./geometry/vec3.h"
-#include "color.h"
+#include "interval.h"
+#include "../geometry/ray.h"
+#include "../geometry/vec3.h"
+#include "../color.h"
 
 #endif

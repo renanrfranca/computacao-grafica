@@ -5,7 +5,7 @@
 #ifndef TRIANGLE_H
 #define TRIANGLE_H
 
-#include "../rtweekend.h"
+#include "../util/rtweekend.h"
 #include "hittable.h"
 #include "mat3.h"
 #include "../util/interval.h"
@@ -68,7 +68,6 @@ class triangle : public hittable {
 
             rec.set_face_normal(r, outward_normal);
             rec.mat = mat;
-            // rec.set_face_normal(r, unit_vector(plane_normal));
             return true;
         }
 

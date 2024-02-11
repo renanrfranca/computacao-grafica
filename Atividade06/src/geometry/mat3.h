@@ -1,7 +1,8 @@
 /**
  * @file
  * @brief Contains a class of a 3x3 matrix made from 3 rows of vec3 and basic operations
- */#ifndef mat3_H
+ */
+#ifndef mat3_H
 #define mat3_H
 
 #include <cmath>

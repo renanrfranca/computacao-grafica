@@ -9,7 +9,7 @@
 #include <string>
 #include <fstream>
 
-#include "rtweekend.h"
+#include "util/rtweekend.h"
 
 #include "geometry/hittable.h"
 #include "geometry/hittable_list.h"
@@ -32,14 +32,14 @@ int main() {
     auto glass   = make_shared<dielectric>(1.5);
     auto metal_gold  = make_shared<metal>(color(0.8, 0.6, 0.2), 0.1);
 
-    
+    // Ground
     world.add(make_shared<sphere>(point3( 0.0, -100.5, -1.0), 100.0, diffuse_green));
+    // Diffuse blue sphere in the middle
     world.add(make_shared<sphere>(point3( 2.7,    1, -2.5),   1, diffuse_blue));
-    // world.add(make_shared<sphere>(point3(-5.0,    2.0, -3.0),   2, material_center));
-    // world.add(make_shared<sphere>(point3(-1.0,    0.0, -1.0),  -0.4, material_left));
-    // world.add(make_shared<sphere>(point3( 1.0,    0.0, -1.0),   0.5, material_right));
     
+    // Gold 20 face star
     world.add(make_shared<object>("../resources/20facestar.obj", metal_gold, 1, vec3(0, -2, -2), vec3(90, 0, 0)));
+    // Glass cube
     world.add(make_shared<object>("../resources/cube.obj", glass, 3, vec3(4, 1.5, 0), vec3(30, 45, 0)));
 
     camera camera;

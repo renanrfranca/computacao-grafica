@@ -1,10 +1,18 @@
+/**
+ * @file
+ * @brief Contains classes that define materials with different properties
+ */
 #ifndef MATERIAL_H
 #define MATERIAL_H
 
-#include "../rtweekend.h"
+#include "../util/rtweekend.h"
 
 class hit_record;
 
+/**
+ * @class material
+ * @brief Abstract class representing a type of material and how it interacts with rays.
+ */
 class material {
   public:
     virtual ~material() = default;
@@ -13,6 +21,14 @@ class material {
         const ray& r_in, const hit_record& rec, color& attenuation, ray& scattered) const = 0;
 };
 
+/**
+ * @class lambertian
+ * @brief Represents a Lambertian (diffuse) material.
+ * 
+ * @param albedo The color of the material
+ * 
+ * This material emits light in a random direction on each hit.
+ */ 
 class lambertian : public material {
   public:
     lambertian(const color& a) : albedo(a) {}
@@ -34,6 +50,16 @@ class lambertian : public material {
     color albedo;
 };
 
+/**
+ * @class metal
+ * @brief Represents a metal material that reflects light.
+ * 
+ * @param albedo The color of the material
+ * @param fuzz The fuzziness of the reflection. A value from 0 to 1
+ * 
+ * This material reflects most light that hits it.The fuzz parameter determines how much
+ * fuzziness is added to the reflected ray.  
+ */ 
 class metal : public material {
   public:
     metal(const color& a, double f) : albedo(a), fuzz(f < 1 ? f : 1) {}
@@ -51,6 +77,16 @@ class metal : public material {
     double fuzz;
 };
 
+/**
+ * @class dielectric
+ * @brief Represents a dielectric (glass-like) material
+ * 
+ * @param index_of_refraction The index of refraction of the material
+ * 
+ * This material emits light in a random direction on each hit. The
+ * refraction_ratio is the ratio of the index of refraction of the
+ * material being refracted.
+ */
 class dielectric : public material {
   public:
     dielectric(double index_of_refraction) : ir(index_of_refraction) {}

@@ -8,7 +8,7 @@
 #define HITTABLE_H
 
 #include "ray.h"
-#include "../rtweekend.h"
+#include "../util/rtweekend.h"
 
 class material; // Fix circular dependency issue
 

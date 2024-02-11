@@ -5,7 +5,7 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
-#include "rtweekend.h"
+#include "util/rtweekend.h"
 
 #include "color.h"
 #include "geometry/hittable.h"

@@ -1,6 +1,17 @@
+/**
+ * @file interval.h
+ * @brief Contains a class representing a closed interval [min, max]
+*/
 #ifndef INTERVAL_H
 #define INTERVAL_H
 
+/**
+ * @class interval
+ * @brief A class representing a closed interval [min, max]
+ * 
+ * @param min The minimum value of the interval
+ * @param max The maximum value of the interval
+*/
 class interval {
   public:
     double min, max;
