@@ -27,29 +27,31 @@
 int main() {
     hittable_list world;
 
-    // auto material_ground = make_shared<lambertian>(color(0.8, 0.8, 0.0));
-    // auto material_center = make_shared<lambertian>(color(0.7, 0.3, 0.3));
-    // auto material_left   = make_shared<metal>(color(0.8, 0.8, 0.8));
-    // auto material_right  = make_shared<metal>(color(0.8, 0.6, 0.2));
+    auto diffuse_green = make_shared<lambertian>(color(0.8, 0.8, 0.0));
+    auto diffuse_blue = make_shared<lambertian>(color(0.1, 0.2, 0.5));
+    auto glass   = make_shared<dielectric>(1.5);
+    auto metal_gold  = make_shared<metal>(color(0.8, 0.6, 0.2), 0.1);
 
-    // 
-    // world.add(make_shared<sphere>(point3( 0.0,    0.0, -1.0),   0.5, material_center));
-    // world.add(make_shared<sphere>(point3(-1.0,    0.0, -1.0),   0.5, material_left));
+    
+    world.add(make_shared<sphere>(point3( 0.0, -100.5, -1.0), 100.0, diffuse_green));
+    world.add(make_shared<sphere>(point3( 2.7,    1, -2.5),   1, diffuse_blue));
+    // world.add(make_shared<sphere>(point3(-5.0,    2.0, -3.0),   2, material_center));
+    // world.add(make_shared<sphere>(point3(-1.0,    0.0, -1.0),  -0.4, material_left));
     // world.add(make_shared<sphere>(point3( 1.0,    0.0, -1.0),   0.5, material_right));
     
-    world.add(make_shared<object>("../resources/20facestar.obj", make_shared<metal>(color(0.8, 0.8, 0.1)), 1, vec3(0, -2, -2), vec3(90, 0, 0)));
-    world.add(make_shared<sphere>(point3( 0.0, -100.5, -1.0), 100.0, make_shared<lambertian>(color(0.1, 0.1, 0.8))));
+    world.add(make_shared<object>("../resources/20facestar.obj", metal_gold, 1, vec3(0, -2, -2), vec3(90, 0, 0)));
+    world.add(make_shared<object>("../resources/cube.obj", glass, 3, vec3(4, 1.5, 0), vec3(30, 45, 0)));
 
     camera camera;
 
     camera.aspect_ratio      = 16.0 / 9.0;
     camera.image_width       = 400;
-    camera.samples_per_pixel = 200;
-    camera.max_depth         = 50;
+    camera.samples_per_pixel = 300;
+    camera.max_depth         = 100;
 
-    camera.vfov     = 90;
-    camera.lookfrom = point3(5,3,-5);
-    camera.lookat   = point3(0,3,0);
+    camera.vfov     = 70;
+    camera.lookfrom = point3(4,4,4);
+    camera.lookat   = point3(3,2,0);
     camera.vup      = vec3(0,1,0);
 
     camera.render(world, "camera");
