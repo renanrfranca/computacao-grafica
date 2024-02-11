@@ -1,3 +1,7 @@
+/**
+ * @file camera.h
+ * @brief Contains the declaration of the camera class which is used to simulate a camera in a ray-traced scene.
+ */
 #ifndef CAMERA_H
 #define CAMERA_H
 
@@ -8,17 +12,30 @@
 
 #include <iostream>
 
+/**
+ * @class camera
+ * @brief Simulates a camera for ray tracing in 3D scenes.
+ *
+ * @param aspect_ratio The ratio of the image's width to its height.
+ * @param image_width The width of the image that the camera will render, in pixels.
+ * @param samples_per_pixel The number of samples to take per pixel for anti-aliasing.
+ * @param max_depth The maximum recursion depth for ray bouncing.
+ * @param vfov The camera's vertical field of view, in degrees.
+ * @param lookfrom The location in the scene from which the camera is viewing.
+ * @param lookat The Point the camera is looking at.
+ * @param vup Camera-relative "up" direction.
+ */
 class camera {
   public:
-    double aspect_ratio      = 1.0;  // Ratio of image width over height
-    int    image_width       = 100;  // Rendered image width in pixel count
-    int    samples_per_pixel = 10;   // Count of random samples for each pixel
-    int    max_depth         = 10;   // Maximum number of ray bounces into scene
+    double aspect_ratio      = 1.0;
+    int    image_width       = 100;
+    int    samples_per_pixel = 10;
+    int    max_depth         = 10;
     
-    double vfov     = 90;              // Vertical view angle (field of view)
-    point3 lookfrom = point3(0,0,-1);  // Point camera is looking from
-    point3 lookat   = point3(0,0,0);   // Point camera is looking at
-    vec3   vup      = vec3(0,1,0);     // Camera-relative "up" direction
+    double vfov     = 90;
+    point3 lookfrom = point3(0,0,-1);
+    point3 lookat   = point3(0,0,0);
+    vec3   vup      = vec3(0,1,0);
 
     void render(const hittable& world, const std::string file_name) {
         initialize();

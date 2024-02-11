@@ -5,9 +5,6 @@ project(Atividade05)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# include(CTest)
-# add_subdirectory(tests)
-
 set(SOURCES
     src/atividade5.cpp
 )

@@ -1,3 +1,7 @@
+/**
+ * @file rtweekend.h
+ * @brief Contains common utilities, constants, and helper functions used throughout the application.
+ */
 #ifndef RTWEEKEND_H
 #define RTWEEKEND_H
 

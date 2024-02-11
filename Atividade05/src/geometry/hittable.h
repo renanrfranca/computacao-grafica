@@ -1,8 +1,24 @@
+/**
+ * @file
+ * @brief Contains an abstract class for 3D objects that can be hit by rays and 
+ * the hit_record class that holds intersection details.
+ */
+
 #ifndef HITTABLE_H
 #define HITTABLE_H
 
 #include "ray.h"
 
+
+/**
+ * @class hit_record
+ * @brief Represents the data recorded when a ray hits an object.
+ *
+ * This class holds the details of the intersection of a ray with a hittable object.
+ * It includes the point of intersection, the normal at the intersection,
+ * the parameter 't' from the ray equation, and a boolean indicating
+ * whether the intersection was with the front face of the object.
+ */
 class hit_record {
   public:
     point3 p;
@@ -23,6 +39,13 @@ class hit_record {
     }
 };
 
+/**
+ * @class hittable
+ * @brief Abstract class representing any object that can be hit by a ray.
+ *
+ * This class provides an interface for objects that can be intersected by rays.
+ * The `hit` method updates a `hit_record` object with details of the intersection.
+ */
 class hittable {
   public:
     virtual ~hittable() = default;

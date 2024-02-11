@@ -1,3 +1,7 @@
+/**
+ * @file triangle.h
+ * @brief Contains the triangle, which represents a geometric triangle in 3D space.
+ */
 #ifndef TRIANGLE_H
 #define TRIANGLE_H
 
@@ -6,6 +10,16 @@
 #include "mat3.h"
 #include "../util/interval.h"
 
+/**
+ * @class triangle
+ * @brief Represents a geometric triangle in 3D space.
+ *
+ * This class encapsulates the properties of a triangle, including its vertices and normals at each 
+ * vertex. It inherits from the hittable class, allowing it to be used to detect intersections with rays.
+ *
+ * @param points A mat3 containing the coordinates of the triangle's vertices.
+ * @param normals A mat3 containing the normal vectors at each of the triangle's vertices.
+ */
 class triangle : public hittable {
     public:
         triangle(mat3 _points, mat3 _normals) : points(_points), normals(_normals) {}

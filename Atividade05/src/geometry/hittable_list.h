@@ -1,3 +1,8 @@
+/**
+ * @file
+ * @brief Contains a class that represents a collection of hittable objects that is hittable itself
+ */
+
 #ifndef HITTABLE_LIST_H
 #define HITTABLE_LIST_H
 
@@ -9,6 +14,13 @@
 using std::shared_ptr;
 using std::make_shared;
 
+/**
+ * @class hittable_list
+ * @brief Represents a collection of hittable objects.
+ *
+ * This class encapsulates a list of objects that can be hit by rays. It allows
+ * adding objects to the list, clearing the list, and querying for ray-object intersections.
+ */
 class hittable_list : public hittable {
   public:
     std::vector<shared_ptr<hittable>> objects;

@@ -15,7 +15,7 @@ Pode se ver um exemplo da aplicação do conceito nas imagens de um dedocaedro c
 
 Após a união de todos os conceitos, foi possível atingir o objetivo da tarefa e gerar uma cena com objetos vistos por dois ângulos. Nesta cena utilizamos uma esfera como chão, e os modelos dos arquivos `cube.obj`, `20facestar.obj`, `tri-pyramid.obj` localizados no diretório `resources`. A rotina principal gera um "mundo" com os objetos e cria duas câmeras com parâmetros distintos para renderizar as imagens `camera1.ppm`, `camera1.png`, `camera2.ppm` e `camera2.png` no diretório de execução.
 
-#### Camera 1
+### Camera 1
 
 <img src="./results/camera1.png">
 

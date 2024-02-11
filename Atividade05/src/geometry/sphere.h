@@ -1,3 +1,7 @@
+/**
+ * @file sphere.h
+ * @brief Contains  sphere class, which represents a sphere in 3D space.
+ */
 #ifndef SPHERE_H
 #define SPHERE_H
 
@@ -5,6 +9,16 @@
 #include "vec3.h"
 #include "../util/interval.h"
 
+/**
+ * @class sphere
+ * @brief Represents a sphere in 3D space.
+ * 
+ * This class defines a sphere and inherits from the hittable class, 
+ * allowing it to be used to detect intersections with rays.
+ *
+ * @param center The center point of the sphere.
+ * @param radius The radius of the sphere.
+ */
 class sphere : public hittable {
   public:
     sphere(point3 _center, double _radius) : center(_center), radius(_radius) {}
