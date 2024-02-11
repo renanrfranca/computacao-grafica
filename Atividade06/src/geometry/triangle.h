@@ -9,6 +9,7 @@
 #include "hittable.h"
 #include "mat3.h"
 #include "../util/interval.h"
+#include "material.h"
 
 /**
  * @class triangle
@@ -22,7 +23,8 @@
  */
 class triangle : public hittable {
     public:
-        triangle(mat3 _points, mat3 _normals) : points(_points), normals(_normals) {}
+        triangle(mat3 _points, mat3 _normals, shared_ptr<material> _material) : 
+            points(_points), normals(_normals), mat(_material) {}
 
         bool hit(const ray& r, interval ray_t, hit_record& rec) const override {
             vec3 positionVector = points[0] - r.origin();
@@ -65,6 +67,7 @@ class triangle : public hittable {
             outward_normal = unit_vector(outward_normal);
 
             rec.set_face_normal(r, outward_normal);
+            rec.mat = mat;
             // rec.set_face_normal(r, unit_vector(plane_normal));
             return true;
         }
@@ -72,6 +75,7 @@ class triangle : public hittable {
     private:
         mat3 points;
         mat3 normals;
+        shared_ptr<material> mat;
 
         vec3 AB = points[1] - points[0]; 
         vec3 BC = points[2] - points[1]; 

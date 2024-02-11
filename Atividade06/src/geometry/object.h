@@ -16,6 +16,7 @@
 #include "mat3.h"
 #include "triangle.h"
 #include "hittable_list.h"
+#include "material.h"
 
 using std::make_shared;
 using std::shared_ptr;
@@ -30,10 +31,11 @@ class object : public hittable {
     public:
         object(
             std::string _file_path, 
+            shared_ptr<material> _material, 
             int _scale = 1, 
             vec3 _shift = vec3(),
             vec3 _rotation = vec3()
-        ) : file_path(_file_path), scale(_scale), shift(_shift), rotation(_rotation) {
+        ) : file_path(_file_path), mat(_material), scale(_scale), shift(_shift), rotation(_rotation) {
             readObj();
         }
 
@@ -46,6 +48,7 @@ class object : public hittable {
 
     private:
         std::string file_path;
+        shared_ptr<material> mat;
         double scale;
         vec3 shift;
         vec3 rotation;
@@ -184,7 +187,8 @@ class object : public hittable {
 
                 shared_ptr<triangle> tri = make_shared<triangle>(
                     getValuesFromIndexes(vertice_index_list, vertice_list),
-                    getValuesFromIndexes(normal_index_list, normal_list)
+                    getValuesFromIndexes(normal_index_list, normal_list),
+                    this->mat
                 );
 
                 triangle_list.add(tri);            
