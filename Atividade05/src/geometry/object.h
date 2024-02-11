@@ -10,10 +10,15 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <memory>
 
 #include "vec3.h"
 #include "mat3.h"
 #include "triangle.h"
+#include "hittable_list.h"
+
+using std::make_shared;
+using std::shared_ptr;
 
 /**
  * @class object
@@ -23,16 +28,18 @@
  */
 class object : public hittable {
     public:
-        object(std::string _file_path, int _scale = 1, vec3 _shift = vec3(0, 0, 0)) : file_path(_file_path), scale(_scale), shift(_shift) {
+        object(
+            std::string _file_path, 
+            int _scale = 1, 
+            vec3 _shift = vec3(),
+            vec3 _rotation = vec3()
+        ) : file_path(_file_path), scale(_scale), shift(_shift), rotation(_rotation) {
             readObj();
         }
 
         bool hit(const ray& r, interval ray_t, hit_record& rec) const override {
-            for (auto triangle : triangle_list) {
-                if (triangle.hit(r, ray_t, rec)) {
-                    return true;
-                }
-            }
+            if (triangle_list.hit(r, ray_t, rec))
+                return true;
 
             return false;
         }
@@ -41,11 +48,62 @@ class object : public hittable {
         std::string file_path;
         double scale;
         vec3 shift;
+        vec3 rotation;
 
         std::vector<vec3> vertice_list;
         std::vector<vec3> normal_list;
         std::vector<vec3> texture_list;
-        std::vector<triangle> triangle_list;
+        hittable_list triangle_list;
+
+        point3 rotate_x(point3 point, double theta) {
+            double sinTheta = sin(theta);
+            double cosTheta = cos(theta);
+
+            return point3(
+                point.x(),
+                point.y() * cosTheta - point.z() * sinTheta,
+                point.z() * cosTheta + point.y() * sinTheta
+            );
+        }
+
+        point3 rotate_y(point3 point, double theta) {
+            double sinTheta = sin(theta);
+            double cosTheta = cos(theta);
+
+            return point3(
+                point.x() * cosTheta + point.z() * sinTheta,
+                point.y(),
+                point.z() * cosTheta - point.x() * sinTheta
+            );
+        }
+
+        point3 rotate_z(point3 point, double theta) {
+            double sinTheta = sin(theta);
+            double cosTheta = cos(theta);
+
+            return point3(
+                point.x() * cosTheta - point.y() * sinTheta,
+                point.y() * cosTheta - point.x() * sinTheta,
+                point.z()
+
+            );
+        }
+
+        point3 rotate(point3 vertex, vec3 rotation_vector) {
+            point3 result = vertex;
+            rotation_vector[0] = degrees_to_radians(rotation_vector[0]);
+            rotation_vector[1] = degrees_to_radians(rotation_vector[1]);
+            rotation_vector[2] = degrees_to_radians(rotation_vector[2]);
+
+            if (rotation_vector.x() != 0)
+                result = rotate_x(result, rotation_vector.x());
+            if (rotation_vector.y() != 0)
+                result = rotate_y(result, rotation_vector.y());
+            if (rotation_vector.z() != 0)
+                result = rotate_z(result, rotation_vector.z());
+
+            return result;    
+        }
         
         /**
          * Checks if the supplied index is valid for the given size
@@ -81,6 +139,7 @@ class object : public hittable {
                 iss >> vertex[0] >> vertex[1] >> vertex[2];
                 vertex *= scale;
                 vertex += shift;
+                vertex = rotate(vertex, rotation);
                 vertice_list.push_back(vertex);
             } else if (line.substr(0, 3) == "vt ") {
                 std::istringstream iss(line.substr(3));
@@ -123,11 +182,12 @@ class object : public hittable {
                     normal_index_list.push_back(c);
                 }
 
-                triangle triangle;
-                triangle.points = getValuesFromIndexes(vertice_index_list, vertice_list);
-                triangle.normals = getValuesFromIndexes(normal_index_list, normal_list);
+                shared_ptr<triangle> tri = make_shared<triangle>(
+                    getValuesFromIndexes(vertice_index_list, vertice_list),
+                    getValuesFromIndexes(normal_index_list, normal_list)
+                );
 
-                triangle_list.push_back(triangle);            
+                triangle_list.add(tri);            
             }
         }
 

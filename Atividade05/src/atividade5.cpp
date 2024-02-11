@@ -27,21 +27,37 @@
 int main() {
     hittable_list world;
 
-    world.add(make_shared<object>("../resources/tri-pyramid.obj", 1, vec3(0, 0, -2)));
-    // world.add(make_shared<sphere>(point3(0,0,-1), 0.5));
-    // world.add(make_shared<sphere>(point3(0,-100.5,-1), 100));
+    world.add(make_shared<object>("../resources/tri-pyramid.obj", 100, vec3(-6, 2, -14), vec3(0, 30, 0)));
+    world.add(make_shared<object>("../resources/20facestar.obj", 1, vec3(0, -2, -2), vec3(90, 0, 0)));
+    world.add(make_shared<object>("../resources/cube.obj", 2, vec3(4, 1.5, 0), vec3(30, 45, 0)));
+    // world.add(make_shared<object>("../resources/dodecahedron.obj", 1, vec3(0, 5, 6)));
+    // world.add(make_shared<sphere>(point3(4,5,-1), 4));
 
-    camera camera;
+    world.add(make_shared<sphere>(point3(0,-100,-1), 100)); // Ground
+
+    camera camera, camera2;
 
     camera.aspect_ratio      = 16.0 / 9.0;
     camera.image_width       = 400;
-    camera.samples_per_pixel = 50;
-    camera.max_depth         = 10;
+    camera.samples_per_pixel = 200;
+    camera.max_depth         = 50;
 
-    camera.vfov     = 90;
-    camera.lookfrom = point3(0,0,-2);
-    camera.lookat   = point3(0,0,0);
+    camera.vfov     = 60;
+    camera.lookfrom = point3(0,3,-15);
+    camera.lookat   = point3(0,2,0);
     camera.vup      = vec3(0,1,0);
 
-    camera.render(world, "atividade5");
+    camera.render(world, "camera1");
+
+    camera2.aspect_ratio      = 16.0 / 9.0;
+    camera2.image_width       = 400;
+    camera2.samples_per_pixel = 200;
+    camera2.max_depth         = 50;
+
+    camera2.vfov     = 60;
+    camera2.lookfrom = point3(8,10,7);
+    camera2.lookat   = point3(0,0,0);
+    camera2.vup      = vec3(0,1,0);
+
+    camera2.render(world, "camera2");
 }

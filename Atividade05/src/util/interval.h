@@ -14,7 +14,7 @@ class interval {
     }
 
     bool surrounds(double x) const {
-        return min < x && x < max;
+        return min < x && x < max ;
     }
 
     double clamp(double x) const {

@@ -43,12 +43,7 @@ class mat3 {
     }
 
     double determinant() const {
-        // 
-        double a = r[0].x(), b = r[0].y(), c = r[0].z();
-        double d = r[1].x(), e = r[1].y(), f = r[1].z();
-        double g = r[2].x(), h = r[2].y(), i = r[2].z();
-
-        return a * (e * i - f * h) - b * (d * i - f * g) + c * (d * h - e * g);
+        return dot(cross(r[0], r[1]), r[2]); 
     }
 };
 
