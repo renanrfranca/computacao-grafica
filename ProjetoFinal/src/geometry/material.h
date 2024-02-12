@@ -115,6 +115,14 @@ class dielectric : public material {
   private:
     double ir; // Index of Refraction
 
+    /**
+     * Calculate reflectance using Schlick's approximation.
+     *
+     * @param cosine the cosine value
+     * @param ref_idx the refraction index
+     *
+     * @return the reflectance value
+     */
     static double reflectance(double cosine, double ref_idx) {
         // Use Schlick's approximation for reflectance.
         auto r0 = (1-ref_idx) / (1+ref_idx);

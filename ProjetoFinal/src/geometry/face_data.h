@@ -29,6 +29,16 @@ public:
     int nB_index;
     int nC_index;
 
+    
+    /**
+     * Matches face indexes to vertex and normal lists and generates a triangle object.
+     *
+     * @param vertice_list a vector of point3 objects representing all vertices of the object
+     * @param normal_list a vector of vec3 objects representing all vertice normals of the object
+     * @param mat a shared pointer to a material object to be used by the triangle
+     *
+     * @return a shared pointer to a triangle object
+     */
     shared_ptr<triangle> make_triangle(std::vector<point3> vertice_list, std::vector<vec3> normal_list, shared_ptr<material> mat) {
         mat3 points = mat3(
             vertice_list[A_index],
@@ -49,6 +59,9 @@ public:
         );
     }
 
+    /**
+     * Decrements all indexes since obj indexes are not zero starting
+     */
     void to_zero_starting_indices() {
         A_index--;
         B_index--;
@@ -58,6 +71,9 @@ public:
         nC_index--;
     }
 
+    /**
+     * Checks if all indexes are valid
+     */ 
     void validate_indices(int vertice_list_size, int normal_list_size) {
         validate_index(A_index, vertice_list_size);
         validate_index(B_index, vertice_list_size);
@@ -114,19 +130,27 @@ inline face_data read_format_b(std::string face_line) {
     return face;
 }
 
+/**
+ * @brief Parses a face line from an obj file and creates a face_data object
+ * 
+ * Formats accepted:
+ * `f 1/1/1 2/2/2 3/3/3`
+ * or
+ * `f 1//1 2//2 3//3`
+ * 
+ * @param face_line the line to be parsed
+ * 
+ * @return a face_data object
+ */
 inline face_data from_obj_line(std::string face_line) {
-    // format a example: f 1/1/1 2/2/2 3/3/3
     std::regex format_a_pattern(R"(f \d+\/\d+\/\d+ \d+\/\d+\/\d+ \d+\/\d+\/\d+\r?)");
-    // format b example: f 1//1 2//2 3//3
     std::regex format_b_pattern(R"(f \d+\/\/\d+ \d+\/\/\d+ \d+\/\/\d+\r?)");
 
-    if (std::regex_match(face_line, format_a_pattern)) {
+    if (std::regex_match(face_line, format_a_pattern)) 
         return read_format_a(face_line);
-    }
     
-    if (std::regex_match(face_line, format_b_pattern)) {
+    if (std::regex_match(face_line, format_b_pattern))
         return read_format_b(face_line);
-    } 
     
     // If neither format
     std::cerr << "Error: Invalid face data format: " << face_line << std::endl;

@@ -63,6 +63,7 @@ class triangle : public hittable {
             v /= denom;
             w = 1 - u - v;
 
+            // Calculate the normal at the intersection point using barycentric coordinates
             vec3 outward_normal = u * normals[0] + v * normals[1] + w * normals[2];
             outward_normal = unit_vector(outward_normal);
 

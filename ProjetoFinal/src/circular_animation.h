@@ -24,11 +24,16 @@ class circular_animation {
         step = degrees_to_radians(step);
     }
 
+    
     /**
-     * 
-     * 
-     * 
+     * A function that returns the position of a point as it `walks` through a circular path frame by frame
+     *
+     * Defines the circle using the following equation:
      * r(t) = c + ρ cos t(i) + ρ sin t(j), 0 ≤ t ≤ 2π
+     * 
+     * @param frame the frame number
+     *
+     * @return the position of the point at the given frame
     */
     point3 get_position(int frame) {
         double t = frame * step;

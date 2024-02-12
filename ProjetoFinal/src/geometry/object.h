@@ -53,6 +53,12 @@ class object : public hittable {
             return false;
         }
 
+        /**
+         * Rotates the object using the given rotation vector.
+         *
+         * @param rotation_vector the vector specifying the rotation angles in degrees along the x, y, and z axes
+         * @param redo_triangles determines if the triangles need to be regenerated after the rotation
+         */
         void rotate(vec3 rotation_vector, bool redo_triangles = true) {
             point3 current_origin = object_origin;
 
@@ -76,10 +82,17 @@ class object : public hittable {
 
             translate(current_origin);
 
+            // needed when rotating during rendering
             if (redo_triangles) 
                 generate_triangles();
         }
 
+        
+        /**
+         * Scales the object by the given factor.
+         *
+         * @param factor the scaling factor
+         */
         void scale(double factor) {
             point3 current_origin = object_origin;
             vec4 aux;
@@ -99,6 +112,11 @@ class object : public hittable {
             translate(current_origin);
         }
 
+        /**
+         * Translates the object using the given translation vector.
+         *
+         * @param t the vector specifying the translation distance along the x, y, and z axes
+         */
         void translate(vec3 t) {
             mat4 transform_mat;
             vec4 aux;
@@ -186,14 +204,15 @@ class object : public hittable {
             return origin / vertice_list.size(); // average of all vertices
         }
 
+        /**
+         * Generates triangles based on the face data read, and material of the object.
+         */
         void generate_triangles() {
             triangle_list.clear();
             for (auto face_data : face_list) {
                 triangle_list.add(face_data.make_triangle(vertice_list, normal_list, mat));
             }
         }
-        
-        
 
         /**
          * @brief Parses a line from a file containing vertex, texture, normal, or face data and

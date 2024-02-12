@@ -31,29 +31,33 @@ point3 circle_path(point3 &center, double radius, double step) {
 }
 
 /**
- * @brief The main function that creates a gradient, a circle and a square image and saves them in P3 PPM and PNG format
+ * @brief The main function that creates and places the objects, the camera, and the animations in the scene and renders it
  */
 int main() {
+    // For calculating rendering time
     auto start = high_resolution_clock::now();
 
-    hittable_list world;
+    hittable_list world; // list of all objects in the scene
 
+    // Materials used
     auto diffuse_maroon = make_shared<lambertian>(color(0.5, 0.0, 0.0));
-    auto diffuse_blue = make_shared<lambertian>(color(0.2, 0.2, 0.3));
-    auto glass   = make_shared<dielectric>(1.5);
-    auto metal_gold  = make_shared<metal>(color(0.8, 0.6, 0.2), 0.3);
+    auto diffuse_blue   = make_shared<lambertian>(color(0.2, 0.2, 0.3));
+    auto metal_gold     = make_shared<metal>(color(0.8, 0.6, 0.2), 0.3);
+    auto glass          = make_shared<dielectric>(1.5);
 
-    
+    // Object creation
     shared_ptr<object> star = make_shared<object>("../resources/20facestar.obj", metal_gold, .8, vec3(0, 2, 0), vec3(-90, 0, 0));
+    shared_ptr<sphere> ground = make_shared<sphere>(point3(0.0, -100, -1.0), 100.0, diffuse_blue);
     shared_ptr<sphere> sphere1 = make_shared<sphere>(point3(0,1,-2), 1.2, diffuse_maroon);
     shared_ptr<sphere> sphere2 = make_shared<sphere>(point3(0,3,-4), 1.2, glass);
 
-    // Ground
-    world.add(make_shared<sphere>(point3(0.0, -100, -1.0), 100.0, diffuse_blue));
+    // Object placement
     world.add(star);
+    world.add(ground);
     world.add(sphere1);
     world.add(sphere2);
 
+    // Camera setup
     camera camera;
 
     camera.aspect_ratio      = 16.0 / 9.0;
@@ -64,6 +68,7 @@ int main() {
     camera.lookat   = point3(0,1,0);
     camera.vup      = vec3(0,1,0);
 
+    // Animation setup
     int duration = 5;
     int frames_per_second = 15;
     int total_frames = duration * frames_per_second;
@@ -80,26 +85,33 @@ int main() {
         720.0/total_frames
     );
 
-    // int i = 8;
+    // Frame rendering
     for (int i = 0; i < total_frames; i++) {
+        // For calculating frame rendering time
         auto frame_start = high_resolution_clock::now();
+        
+        // camera animation
         camera.lookfrom = camera_anim.get_position(i);
+        // maroon sphere animation
         sphere1->set_center(sphere1_anim.get_position(i));
-        camera.render(world, "frame_" + std::to_string(i));   
+        // render frame
+        camera.render(world, "frame_" + std::to_string(i));
+        // star rotation
         star->rotate(vec3(0, 0, 216/total_frames));
 
+        // Frame rendering time report
         auto frame_Stop = high_resolution_clock::now();
-        auto duration = duration_cast<std::chrono::seconds>(frame_Stop - frame_start);
-
+        auto frame_duration = duration_cast<std::chrono::seconds>(frame_Stop - frame_start);
         std::cout << "\rFrame " << i << " Rendering time: "
-         << duration.count() << " seconds. "
-         << "Estimated remaining time: " << (total_frames - i - 1) * duration.count() << " seconds." << std::endl;
+         << frame_duration.count() << " seconds. "
+         << "Estimated remaining time: " << (total_frames - i - 1) * frame_duration.count() << " seconds." << std::endl;
     }
 
+    // Animation rendering time report
     auto stop = high_resolution_clock::now();
-    auto duration = duration_cast<minutes>(stop - start);
+    auto rendering_duration = duration_cast<minutes>(stop - start);
     std::cout << "Rendering time: "
-         << duration.count() << " minutes." << std::endl;
+         << rendering_duration.count() << " minutes." << std::endl;
 
     return 0; 
 }
