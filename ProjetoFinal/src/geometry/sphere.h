@@ -25,6 +25,10 @@ class sphere : public hittable {
     sphere(point3 _center, double _radius, shared_ptr<material> _material)
       : center(_center), radius(_radius), mat(_material) {}
 
+    void set_center(point3 _center) {
+        center = _center;
+    }
+
     bool hit(const ray& r, interval ray_t, hit_record& rec) const override {
         vec3 oc = r.origin() - center;
         auto a = r.direction().length_squared();

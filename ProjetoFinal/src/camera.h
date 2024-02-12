@@ -57,9 +57,7 @@ class camera {
             }
         }
 
-        std::clog << "\rDone.                 \n";
-
-        saveToPPM(file_name + ".ppm", output_stream.str());
+        // saveToPPM(file_name + ".ppm", output_stream.str());
         saveToPng(file_name + ".png", image_width, image_height, output_stream.str());
     }
 

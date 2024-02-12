@@ -14,9 +14,11 @@
 
 #include "vec3.h"
 #include "mat3.h"
+#include "mat4.h"
 #include "triangle.h"
 #include "hittable_list.h"
 #include "material.h"
+#include "face_data.h"
 
 using std::make_shared;
 using std::shared_ptr;
@@ -32,11 +34,16 @@ class object : public hittable {
         object(
             std::string _file_path, 
             shared_ptr<material> _material, 
-            int _scale = 1, 
+            double _scale_factor = 1, 
             vec3 _shift = vec3(),
             vec3 _rotation = vec3()
-        ) : file_path(_file_path), mat(_material), scale(_scale), shift(_shift), rotation(_rotation) {
+        ) : file_path(_file_path), mat(_material), scale_factor(_scale_factor), shift(_shift), rotation(_rotation) {
             readObj();
+            calculate_origin();
+            rotate(rotation, false);
+            translate(shift);
+            scale(scale_factor);
+            generate_triangles();
         }
 
         bool hit(const ray& r, interval ray_t, hit_record& rec) const override {
@@ -46,88 +53,147 @@ class object : public hittable {
             return false;
         }
 
+        void rotate(vec3 rotation_vector, bool redo_triangles = true) {
+            point3 current_origin = object_origin;
+
+            rotation_vector[0] = degrees_to_radians(rotation_vector[0]);
+            rotation_vector[1] = degrees_to_radians(rotation_vector[1]);
+            rotation_vector[2] = degrees_to_radians(rotation_vector[2]);
+            
+            translate(-current_origin);
+
+            for (int i = 0; i < vertice_list.size(); i++) {                
+                vertice_list[i] = rotate_x(vertice_list[i], rotation_vector.x());
+                vertice_list[i] = rotate_y(vertice_list[i], rotation_vector.y());
+                vertice_list[i] = rotate_z(vertice_list[i], rotation_vector.z());    
+            }
+
+            for (int i = 0; i < normal_list.size(); i++) {                
+                normal_list[i] = rotate_x(normal_list[i], rotation_vector.x());
+                normal_list[i] = rotate_y(normal_list[i], rotation_vector.y());
+                normal_list[i] = rotate_z(normal_list[i], rotation_vector.z());    
+            }
+
+            translate(current_origin);
+
+            if (redo_triangles) 
+                generate_triangles();
+        }
+
+        void scale(double factor) {
+            point3 current_origin = object_origin;
+            vec4 aux;
+            mat4 transform_mat;
+            transform_mat = factor * transform_mat;
+            transform_mat[3][3] = 1;
+            
+            translate(-current_origin);
+
+            for (int i = 0; i < vertice_list.size(); i++) {
+                aux = vec4(vertice_list[i].x(), vertice_list[i].y(), vertice_list[i].z(), 1);
+                aux = transform_mat * aux;
+
+                vertice_list[i] = point3(aux.x(), aux.y(), aux.z());
+            }
+
+            translate(current_origin);
+        }
+
+        void translate(vec3 t) {
+            mat4 transform_mat;
+            vec4 aux;
+
+            transform_mat[3][0] = t.x();
+            transform_mat[3][1] = t.y();
+            transform_mat[3][2] = t.z();
+
+            for (int i = 0; i < vertice_list.size(); i++) {
+                aux = vec4(vertice_list[i].x(), vertice_list[i].y(), vertice_list[i].z(), 1);
+                aux = transform_mat * aux;
+
+                vertice_list[i] = point3(aux.x(), aux.y(), aux.z());
+            }
+
+            object_origin += t;
+        }
+
     private:
         std::string file_path;
         shared_ptr<material> mat;
-        double scale;
+        point3 object_origin;
+        double scale_factor;
         vec3 shift;
         vec3 rotation;
 
         std::vector<vec3> vertice_list;
         std::vector<vec3> normal_list;
         std::vector<vec3> texture_list;
+        std::vector<face_data> face_list;
         hittable_list triangle_list;
 
-        point3 rotate_x(point3 point, double theta) {
-            double sinTheta = sin(theta);
-            double cosTheta = cos(theta);
+        vec3 rotate_x(vec3 target, double theta) {
+            if (theta == 0) return target;
+            
+            mat4 transform_mat;
+            transform_mat[1][1] = cos(theta);
+            transform_mat[1][2] = -sin(theta);
+            transform_mat[2][1] = sin(theta);
+            transform_mat[2][2] = cos(theta);
 
-            return point3(
-                point.x(),
-                point.y() * cosTheta - point.z() * sinTheta,
-                point.z() * cosTheta + point.y() * sinTheta
-            );
+            vec4 aux = vec4(target.x(), target.y(), target.z(), 1);
+            aux = transform_mat * aux;
+
+            return vec3(aux.x(), aux.y(), aux.z());
         }
 
-        point3 rotate_y(point3 point, double theta) {
-            double sinTheta = sin(theta);
-            double cosTheta = cos(theta);
+        vec3 rotate_y(vec3 target, double theta) {
+            if (theta == 0) return target;
+            
+            mat4 transform_mat;
+            transform_mat[0][0] = cos(theta);
+            transform_mat[0][2] = sin(theta);
+            transform_mat[2][0] = -sin(theta);
+            transform_mat[2][2] = cos(theta);
 
-            return point3(
-                point.x() * cosTheta + point.z() * sinTheta,
-                point.y(),
-                point.z() * cosTheta - point.x() * sinTheta
-            );
+            vec4 aux = vec4(target.x(), target.y(), target.z(), 1);
+            aux = transform_mat * aux;
+
+            return vec3(aux.x(), aux.y(), aux.z());
         }
 
-        point3 rotate_z(point3 point, double theta) {
-            double sinTheta = sin(theta);
-            double cosTheta = cos(theta);
+        vec3 rotate_z(vec3 target, double theta) {
+            if (theta == 0) return target;
+            
+            mat4 transform_mat;
+            transform_mat[0][0] = cos(theta);
+            transform_mat[0][1] = -sin(theta);
+            transform_mat[1][0] = sin(theta);
+            transform_mat[1][1] = cos(theta);
 
-            return point3(
-                point.x() * cosTheta - point.y() * sinTheta,
-                point.y() * cosTheta - point.x() * sinTheta,
-                point.z()
+            vec4 aux = vec4(target.x(), target.y(), target.z(), 1);
+            aux = transform_mat * aux;
 
-            );
+            return vec3(aux.x(), aux.y(), aux.z());
         }
 
-        point3 rotate(point3 vertex, vec3 rotation_vector) {
-            point3 result = vertex;
-            rotation_vector[0] = degrees_to_radians(rotation_vector[0]);
-            rotation_vector[1] = degrees_to_radians(rotation_vector[1]);
-            rotation_vector[2] = degrees_to_radians(rotation_vector[2]);
+        point3 calculate_origin() {
+            point3 origin;
+            
+            for (auto point : vertice_list) {
+                origin += point;
+            }
 
-            if (rotation_vector.x() != 0)
-                result = rotate_x(result, rotation_vector.x());
-            if (rotation_vector.y() != 0)
-                result = rotate_y(result, rotation_vector.y());
-            if (rotation_vector.z() != 0)
-                result = rotate_z(result, rotation_vector.z());
-
-            return result;    
+            return origin / vertice_list.size(); // average of all vertices
         }
-        
-        /**
-         * Checks if the supplied index is valid for the given size
-         *
-         * @param index the index to validate
-         * @param size the size to compare the index against
-         */
-        void validate_index(int index, int size) {
-            if (index < 0 || index >= size) {
-                std::cerr << "Error: OBJ index out of bounds" << std::endl;
-                exit(1);
+
+        void generate_triangles() {
+            triangle_list.clear();
+            for (auto face_data : face_list) {
+                triangle_list.add(face_data.make_triangle(vertice_list, normal_list, mat));
             }
         }
-
-        mat3 getValuesFromIndexes(std::vector<int> indexes, std::vector<vec3> list) {
-            mat3 data;
-            data[0] = list[indexes[0]];
-            data[1] = list[indexes[1]];
-            data[2] = list[indexes[2]];
-            return data;
-        }
+        
+        
 
         /**
          * @brief Parses a line from a file containing vertex, texture, normal, or face data and
@@ -140,9 +206,6 @@ class object : public hittable {
                 std::istringstream iss(line.substr(2));
                 point3 vertex;
                 iss >> vertex[0] >> vertex[1] >> vertex[2];
-                vertex *= scale;
-                vertex += shift;
-                vertex = rotate(vertex, rotation);
                 vertice_list.push_back(vertex);
             } else if (line.substr(0, 3) == "vt ") {
                 std::istringstream iss(line.substr(3));
@@ -155,43 +218,9 @@ class object : public hittable {
                 iss >> normal[0] >> normal[1] >> normal[2];
                 normal_list.push_back(normal);
             } else if (line.substr(0, 2) == "f ") {
-                // Possible formats: "f 1/1/1 2/2/2 3/3/3" and "f 1//1 2//2 3//3"
-                std::istringstream iss(line.substr(2));
-                std::vector<int> vertice_index_list;
-                std::vector<int> texture_index_list;
-                std::vector<int> normal_index_list;
-                int a, b, c;
-
-                for (int i = 0; i < 3; i++) {
-                    char slash;
-                    iss >> a >> slash;
-                    if (iss.peek() == '/') {
-                        b = 0;
-                        iss >> slash >> c;
-                    } else {
-                        iss >> b >> slash >> c;
-                    }
-                                    
-                    a--; b--; c--; // obj indices start at 1
-                    
-                    validate_index(a, vertice_list.size());
-                    if (b >= 0)
-                        validate_index(b, texture_list.size());
-                    validate_index(c, normal_list.size());
-
-                    vertice_index_list.push_back(a);
-                    if (b >= 0)
-                        texture_index_list.push_back(b);
-                    normal_index_list.push_back(c);
-                }
-
-                shared_ptr<triangle> tri = make_shared<triangle>(
-                    getValuesFromIndexes(vertice_index_list, vertice_list),
-                    getValuesFromIndexes(normal_index_list, normal_list),
-                    this->mat
-                );
-
-                triangle_list.add(tri);            
+                face_data face = from_obj_line(line);
+                face.validate_indices(vertice_list.size(), normal_list.size());
+                face_list.push_back(from_obj_line(line));        
             }
         }
 
