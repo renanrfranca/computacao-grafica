@@ -26,6 +26,8 @@ Professor: Mario Liziér
 
 ![](./results/out.gif)
 
+[Link para o vídeo no Youtube](https://www.youtube.com/watch?v=irQOytDv7yo)
+
 ### O resultado foi gerado utilizando as seguintes configurações de câmera:
 
 `image_width`: 1024
@@ -58,7 +60,7 @@ Também foi criado um arquivo `.gif` a partir do arquivo mp4 com:
 
 ## Como compilar
 
-Primeiro geramos os build files com `cmake` a partir do diretório raíz desta atividade
+Primeiro geramos os build files com `cmake` a partir do diretório raiz desta atividade
 
 `cmake -S . -B build`
 
