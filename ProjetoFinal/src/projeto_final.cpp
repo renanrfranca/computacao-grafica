@@ -44,7 +44,7 @@ int main() {
     auto metal_gold  = make_shared<metal>(color(0.8, 0.6, 0.2), 0.3);
 
     
-    shared_ptr<object> star = make_shared<object>("../resources/20facestar.obj", metal_gold, .8, vec3(0, 2, 0), vec3(90, 0, 0));
+    shared_ptr<object> star = make_shared<object>("../resources/20facestar.obj", metal_gold, .8, vec3(0, 2, 0), vec3(-90, 0, 0));
     shared_ptr<sphere> sphere1 = make_shared<sphere>(point3(0,1,-2), 1.2, diffuse_maroon);
     shared_ptr<sphere> sphere2 = make_shared<sphere>(point3(0,3,-4), 1.2, glass);
 
@@ -58,15 +58,15 @@ int main() {
 
     camera.aspect_ratio      = 16.0 / 9.0;
     camera.image_width       = 1024;
-    camera.samples_per_pixel = 200;
-    camera.max_depth         = 100;
+    camera.samples_per_pixel = 100;
+    camera.max_depth         = 50;
     camera.vfov     = 90;
     camera.lookat   = point3(0,1,0);
     camera.vup      = vec3(0,1,0);
 
-    int seconds = 5;
+    int duration = 5;
     int frames_per_second = 15;
-    int total_frames = seconds * frames_per_second;
+    int total_frames = duration * frames_per_second;
 
     circular_animation camera_anim = circular_animation(
         point3(0, 4, 0),
@@ -84,15 +84,16 @@ int main() {
     for (int i = 0; i < total_frames; i++) {
         auto frame_start = high_resolution_clock::now();
         camera.lookfrom = camera_anim.get_position(i);
-        star->rotate(vec3(0, 0, 360/total_frames));
         sphere1->set_center(sphere1_anim.get_position(i));
         camera.render(world, "frame_" + std::to_string(i));   
+        star->rotate(vec3(0, 0, 216/total_frames));
 
         auto frame_Stop = high_resolution_clock::now();
         auto duration = duration_cast<std::chrono::seconds>(frame_Stop - frame_start);
 
         std::cout << "\rFrame " << i << " Rendering time: "
-         << duration.count() << " seconds." << std::endl;
+         << duration.count() << " seconds. "
+         << "Estimated remaining time: " << (total_frames - i - 1) * duration.count() << " seconds." << std::endl;
     }
 
     auto stop = high_resolution_clock::now();
